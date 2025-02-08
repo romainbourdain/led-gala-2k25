@@ -2,12 +2,15 @@
   "name": "mur-de-led-web",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://romainbourdain.github.io/led-gala-2k25",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.2",
@@ -21,9 +24,7 @@
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.0.1",
     "tailwindcss-animate": "^1.0.7",
-    "zustand": "^5.0.3",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

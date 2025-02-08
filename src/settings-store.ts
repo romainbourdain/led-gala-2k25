@@ -26,7 +26,7 @@ export const useSettingsStore = create<SettingsStore>((set) => ({
   y: 60,
   width: 104,
   height: 26,
-  rotate: 90,
+  rotate: -90,
   setX: (x: number) => set((state) => ({ ...state, x })),
   setY: (y: number) => set((state) => ({ ...state, y })),
   setWidth: (width: number) => set((state) => ({ ...state, width })),

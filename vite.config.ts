@@ -4,7 +4,7 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [react()],
-  base: "/led-gala-2k25",
+  base: "/led-gala-2k25/",
 
   resolve: {
     alias: {

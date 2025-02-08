@@ -6,7 +6,7 @@ export const CaptureZone = forwardRef<HTMLCanvasElement, unknown>((_, ref) => {
   const { x, y, width, height, rotate } = useSettingsStore();
   return (
     <div
-      className="fixed border-4 border-red-500"
+      className="fixed"
       style={{
         width,
         height,
