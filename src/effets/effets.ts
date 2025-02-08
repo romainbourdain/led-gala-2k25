@@ -50,8 +50,9 @@ export const effects = {
   fire: {
     label: "Feu",
     params: {
-      speed: 50,
-      height: 50,
+      speed: 1,
+      height: 100,
+      particleFrequency: 100,
     },
     updateCanvas: updateFireEffect,
     uiRenderer: fireEffectUiRenderer,
