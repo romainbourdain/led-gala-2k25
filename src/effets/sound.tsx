@@ -1,3 +1,6 @@
+import alex from "@/assets/images/alex.png";
+import ph from "@/assets/images/ph.png";
+import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { EffectUiRenderer, EffectUpdateCanvas } from "./effets";
@@ -5,6 +8,7 @@ import { EffectUiRenderer, EffectUpdateCanvas } from "./effets";
 export const updateSoundVisualizer: EffectUpdateCanvas<{
   frequencyThreshold: number;
   scaleFactor: number;
+  backgroundImage: string | null;
 }> = (canvasRef, params) => {
   if (!canvasRef?.current) return () => {};
   const canvas = canvasRef.current;
@@ -16,6 +20,8 @@ export const updateSoundVisualizer: EffectUpdateCanvas<{
   let dataArray: Uint8Array;
   let source: MediaStreamAudioSourceNode;
   let animationFrameId: number;
+  const backgroundImage = params.backgroundImage ? new Image() : null;
+  if (backgroundImage) backgroundImage.src = params.backgroundImage || "";
 
   navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
     audioContext = new AudioContext();
@@ -32,28 +38,30 @@ export const updateSoundVisualizer: EffectUpdateCanvas<{
       analyser.getByteFrequencyData(dataArray);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = "black";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      if (backgroundImage && backgroundImage.complete) {
+        ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+      } else {
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
 
       const barWidth = (canvas.width / params.frequencyThreshold) * 2.5;
       let barHeight;
       const centerX = canvas.width / 2;
 
       for (let i = 0; i < params.frequencyThreshold; i++) {
-        const index = params.frequencyThreshold - i - 1; // Inverser l'ordre des fréquences
+        const index = params.frequencyThreshold - i - 1;
         barHeight = (dataArray[index] * params.scaleFactor) / 50;
         ctx.fillStyle = `rgb(${barHeight + 100}, ${50 + barHeight / 2}, ${
           255 - barHeight
         })`;
 
-        // Dessiner à gauche (basses)
         ctx.fillRect(
           centerX - index * (barWidth + 1),
           canvas.height - barHeight,
           barWidth,
           barHeight
         );
-        // Dessiner à droite (miroir)
         ctx.fillRect(
           centerX + index * (barWidth + 1),
           canvas.height - barHeight,
@@ -76,6 +84,7 @@ export const updateSoundVisualizer: EffectUpdateCanvas<{
 export const soundVisualizerUiRenderer: EffectUiRenderer<{
   frequencyThreshold: number;
   scaleFactor: number;
+  backgroundImage: string | null;
 }> = ({ frequencyThreshold, scaleFactor }, setEffectParams) => (
   <div className="space-y-4">
     <div>
@@ -101,6 +110,23 @@ export const soundVisualizerUiRenderer: EffectUiRenderer<{
         step={1}
         onValueChange={(val) => setEffectParams({ scaleFactor: val[0] })}
       />
+    </div>
+    <div className="space-y-2">
+      <Label>Image de fond</Label>
+      <div className="flex gap-2">
+        <Button onClick={() => setEffectParams({ backgroundImage: alex })}>
+          Alex
+        </Button>
+        <Button onClick={() => setEffectParams({ backgroundImage: ph })}>
+          Romain
+        </Button>
+        <Button
+          onClick={() => setEffectParams({ backgroundImage: null })}
+          variant="secondary"
+        >
+          Aucune
+        </Button>
+      </div>
     </div>
   </div>
 );
