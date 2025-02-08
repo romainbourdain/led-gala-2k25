@@ -22,10 +22,10 @@ export type SettingsStore = {
 };
 
 export const useSettingsStore = create<SettingsStore>((set) => ({
-  x: 65,
-  y: 60,
-  width: 104,
-  height: 26,
+  x: 80,
+  y: 80,
+  width: 128,
+  height: 32,
   rotate: -90,
   setX: (x: number) => set((state) => ({ ...state, x })),
   setY: (y: number) => set((state) => ({ ...state, y })),
