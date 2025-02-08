@@ -4,6 +4,7 @@ import { gradientUiRenderer, updateGradient } from "./gradient";
 import { imageUiRenderer, updateImage } from "./image";
 import { snowEffectUiRenderer, updateSnowEffect } from "./snow";
 import { solidColorUiRenderer, updateSolidColor } from "./solid-color";
+import { soundVisualizerUiRenderer, updateSoundVisualizer } from "./sound";
 
 export type EffectUpdateCanvas<T extends object> = (
   canvasRef: React.RefObject<HTMLCanvasElement | null>,
@@ -54,6 +55,15 @@ export const effects = {
     },
     updateCanvas: updateFireEffect,
     uiRenderer: fireEffectUiRenderer,
+  },
+  sound: {
+    label: "Visualiseur audio",
+    params: {
+      sampleRate: 2048,
+      maxFrequency: 300,
+    },
+    updateCanvas: updateSoundVisualizer,
+    uiRenderer: soundVisualizerUiRenderer,
   },
 } as Record<
   string,

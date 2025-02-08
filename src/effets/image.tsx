@@ -3,10 +3,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { EffectUiRenderer, EffectUpdateCanvas } from "./effets";
 
-import bdf from "../../public/images/bdf.png";
-import bureauDesFetes from "../../public/images/bureau-de-fetes.png";
-import feu from "../../public/images/feu.jpg";
-import gala from "../../public/images/gala.png";
+import bdf from "@/assets/images/bdf.png";
+import bureauDesFetes from "@/assets/images/bureau-de-fetes.png";
+import feu from "@/assets/images/feu.jpg";
+import gala from "@/assets/images/gala.png";
 
 export const updateImage: EffectUpdateCanvas<{ image: string }> = (
   canvasRef,
