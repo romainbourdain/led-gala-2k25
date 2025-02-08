@@ -1,5 +1,10 @@
 import alex from "@/assets/images/alex.png";
+import aurel from "@/assets/images/aurel.png";
+import beubeu from "@/assets/images/beubeu.png";
+import juju from "@/assets/images/juju.png";
 import ph from "@/assets/images/ph.png";
+import raph from "@/assets/images/raph.png";
+
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
@@ -116,6 +121,18 @@ export const soundVisualizerUiRenderer: EffectUiRenderer<{
       <div className="flex gap-2">
         <Button onClick={() => setEffectParams({ backgroundImage: alex })}>
           Alex
+        </Button>
+        <Button onClick={() => setEffectParams({ backgroundImage: beubeu })}>
+          Beubeu
+        </Button>
+        <Button onClick={() => setEffectParams({ backgroundImage: juju })}>
+          Juju
+        </Button>
+        <Button onClick={() => setEffectParams({ backgroundImage: aurel })}>
+          Aurel
+        </Button>
+        <Button onClick={() => setEffectParams({ backgroundImage: raph })}>
+          Raph
         </Button>
         <Button onClick={() => setEffectParams({ backgroundImage: ph })}>
           Romain
