@@ -37,15 +37,29 @@ export const updateSoundVisualizer: EffectUpdateCanvas<{
 
       const barWidth = (canvas.width / params.frequencyThreshold) * 2.5;
       let barHeight;
-      let x = 0;
+      const centerX = canvas.width / 2;
 
       for (let i = 0; i < params.frequencyThreshold; i++) {
-        barHeight = (dataArray[i] * params.scaleFactor) / 50;
+        const index = params.frequencyThreshold - i - 1; // Inverser l'ordre des fréquences
+        barHeight = (dataArray[index] * params.scaleFactor) / 50;
         ctx.fillStyle = `rgb(${barHeight + 100}, ${50 + barHeight / 2}, ${
           255 - barHeight
         })`;
-        ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-        x += barWidth + 1;
+
+        // Dessiner à gauche (basses)
+        ctx.fillRect(
+          centerX - index * (barWidth + 1),
+          canvas.height - barHeight,
+          barWidth,
+          barHeight
+        );
+        // Dessiner à droite (miroir)
+        ctx.fillRect(
+          centerX + index * (barWidth + 1),
+          canvas.height - barHeight,
+          barWidth,
+          barHeight
+        );
       }
 
       animationFrameId = requestAnimationFrame(render);
