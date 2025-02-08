@@ -60,7 +60,7 @@ export const effects = {
     label: "Visualiseur audio",
     params: {
       frequencyThreshold: 150,
-      scaleFactor: 3,
+      scaleFactor: 25,
     },
     updateCanvas: updateSoundVisualizer,
     uiRenderer: soundVisualizerUiRenderer,
