@@ -3,8 +3,8 @@ import { Slider } from "@/components/ui/slider";
 import { EffectUiRenderer, EffectUpdateCanvas } from "./effets";
 
 export const updateSoundVisualizer: EffectUpdateCanvas<{
-  sampleRate: number;
-  maxFrequency: number;
+  frequencyThreshold: number;
+  scaleFactor: number;
 }> = (canvasRef, params) => {
   if (!canvasRef?.current) return () => {};
   const canvas = canvasRef.current;
@@ -20,8 +20,7 @@ export const updateSoundVisualizer: EffectUpdateCanvas<{
   navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
     audioContext = new AudioContext();
     analyser = audioContext.createAnalyser();
-    analyser.fftSize = params.sampleRate;
-    analyser.maxDecibels = -10;
+    analyser.fftSize = 1024;
     analyser.smoothingTimeConstant = 0.8;
 
     source = audioContext.createMediaStreamSource(stream);
@@ -33,16 +32,18 @@ export const updateSoundVisualizer: EffectUpdateCanvas<{
       analyser.getByteFrequencyData(dataArray);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+      ctx.fillStyle = "black";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      const barWidth = (canvas.width / params.maxFrequency) * 2.5;
+      const barWidth = (canvas.width / params.frequencyThreshold) * 2.5;
       let barHeight;
       let x = 0;
 
-      for (let i = 0; i < params.maxFrequency; i++) {
-        barHeight = dataArray[i] / 2;
-        ctx.fillStyle = `rgb(${barHeight + 100}, 50, 50)`;
+      for (let i = 0; i < params.frequencyThreshold; i++) {
+        barHeight = (dataArray[i] * params.scaleFactor) / 50;
+        ctx.fillStyle = `rgb(${barHeight + 100}, ${50 + barHeight / 2}, ${
+          255 - barHeight
+        })`;
         ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
         x += barWidth + 1;
       }
@@ -59,32 +60,32 @@ export const updateSoundVisualizer: EffectUpdateCanvas<{
 };
 
 export const soundVisualizerUiRenderer: EffectUiRenderer<{
-  sampleRate: number;
-  maxFrequency: number;
-}> = ({ sampleRate, maxFrequency }, setEffectParams) => (
+  frequencyThreshold: number;
+  scaleFactor: number;
+}> = ({ frequencyThreshold, scaleFactor }, setEffectParams) => (
   <div className="space-y-4">
     <div>
-      <Label htmlFor="sampleRate">Fréquence d'échantillonnage</Label>
+      <Label htmlFor="frequencyThreshold">Fréquence seuil (Hz)</Label>
       <Slider
-        id="sampleRate"
+        id="frequencyThreshold"
         className="w-full"
-        value={[sampleRate]}
-        min={256}
-        max={8192}
-        step={256}
-        onValueChange={(val) => setEffectParams({ sampleRate: val[0] })}
+        value={[frequencyThreshold]}
+        min={20}
+        max={2000}
+        step={10}
+        onValueChange={(val) => setEffectParams({ frequencyThreshold: val[0] })}
       />
     </div>
     <div>
-      <Label htmlFor="maxFrequency">Fréquence max prise en compte</Label>
+      <Label htmlFor="scaleFactor">Facteur d'échelle</Label>
       <Slider
-        id="maxFrequency"
+        id="scaleFactor"
         className="w-full"
-        value={[maxFrequency]}
-        min={50}
-        max={2000}
-        step={50}
-        onValueChange={(val) => setEffectParams({ maxFrequency: val[0] })}
+        value={[scaleFactor]}
+        min={1}
+        max={50}
+        step={1}
+        onValueChange={(val) => setEffectParams({ scaleFactor: val[0] })}
       />
     </div>
   </div>
